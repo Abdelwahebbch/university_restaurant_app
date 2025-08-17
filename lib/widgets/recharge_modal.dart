@@ -90,7 +90,7 @@ class _RechargeModalState extends State<RechargeModal> {
                 ),
                 onChanged: (value) {
                   final tickets = int.tryParse(value);
-                  if (tickets != null && tickets > 0) {
+                  if (tickets != null && tickets > 0 && tickets < 100) {
                     setState(() {
                       selectedTickets = tickets;
                     });
