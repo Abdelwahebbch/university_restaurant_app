@@ -16,6 +16,7 @@ class RechargeModal extends StatefulWidget {
 
 class _RechargeModalState extends State<RechargeModal> {
   int selectedTickets = 1;
+  String errorLabel = "Nombre personnalisé";
   final TextEditingController customController = TextEditingController();
 
   @override
@@ -24,8 +25,8 @@ class _RechargeModalState extends State<RechargeModal> {
       color: Colors.black.withValues(alpha: 0.5),
       child: Center(
         child: Container(
-          margin: const EdgeInsets.all(24),
-          padding: const EdgeInsets.all(24),
+          margin: EdgeInsets.all(24),
+          padding: EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -41,71 +42,65 @@ class _RechargeModalState extends State<RechargeModal> {
                     'Recharger ma carte',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF4B5563),
+                          color: Color(0xFF4B5563),
                         ),
                   ),
                   IconButton(
                     onPressed: widget.onClose,
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 24),
-
+              SizedBox(height: 25),
               Text(
                 'Choisissez le nombre de tickets',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: const Color(0xFF4B5563),
+                      color: Color(0xFF4B5563),
                     ),
               ),
-
-              const SizedBox(height: 16),
-
-              // Options prédéfinies
+              SizedBox(height: 15),
               Row(
                 children: [
                   Expanded(
                     child: _buildTicketOption(1),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: _buildTicketOption(5),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 16),
-
-              // Option personnalisée
+              SizedBox(height: 16),
               TextField(
                 controller: customController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: 'Nombre personnalisé',
+                  labelText: errorLabel,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   suffixText: 'tickets',
                 ),
-                onChanged: (value) {
-                  final tickets = int.tryParse(value);
-                  if (tickets != null && tickets > 0 && tickets < 100) {
+                onChanged: (x) {
+                  final nombreTic = int.tryParse(x);
+                  if (nombreTic != null && nombreTic > 0 && nombreTic <= 100) {
                     setState(() {
-                      selectedTickets = tickets;
+                      selectedTickets = nombreTic;
+                      errorLabel = "Nombre personnalisé";
+                    });
+                  } else {
+                    setState(() {
+                      errorLabel = "Saisie un nb <= 100 ";
                     });
                   }
                 },
               ),
-
-              const SizedBox(height: 24),
-
-              // Résumé
+              SizedBox(height: 24),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB),
+                  color: Color(0xFFF9FAFB),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
@@ -115,37 +110,34 @@ class _RechargeModalState extends State<RechargeModal> {
                       'Résumé',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF4B5563),
+                            color: Color(0xFF4B5563),
                           ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('$selectedTickets ticket(s)'),
                         Text(
                           '${selectedTickets * 200} millimes',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // Bouton de confirmation
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => widget.onRecharge(selectedTickets),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0891B2),
+                    backgroundColor: Color(0xFF0891B2),
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Continuer vers le paiement',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
@@ -158,26 +150,25 @@ class _RechargeModalState extends State<RechargeModal> {
     );
   }
 
-  Widget _buildTicketOption(int tickets) {
+  Widget _buildTicketOption(int nbTickets) {
     final isSelected =
-        selectedTickets == tickets && customController.text.isEmpty;
+        selectedTickets == nbTickets && customController.text.isEmpty;
 
     return GestureDetector(
       onTap: () {
         setState(() {
-          selectedTickets = tickets;
+          selectedTickets = nbTickets;
           customController.clear();
         });
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF0891B2).withValues(alpha: 0.1)
+              ? Color(0xFF0891B2).withValues(alpha: 0.1)
               : Colors.white,
           border: Border.all(
-            color:
-                isSelected ? const Color(0xFF0891B2) : const Color(0xFFE5E7EB),
+            color: isSelected ? Color(0xFF0891B2) : Color(0xFFE5E7EB),
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -185,28 +176,24 @@ class _RechargeModalState extends State<RechargeModal> {
         child: Column(
           children: [
             Text(
-              '$tickets',
+              '$nbTickets',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected
-                        ? const Color(0xFF0891B2)
-                        : const Color(0xFF4B5563),
+                    color: isSelected ? Color(0xFF0891B2) : Color(0xFF4B5563),
                   ),
             ),
             Text(
-              tickets == 1 ? 'ticket' : 'tickets',
+              nbTickets == 1 ? 'ticket' : 'tickets',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF9CA3AF),
+                    color: Color(0xFF9CA3AF),
                   ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 5),
             Text(
-              '${tickets * 200} millimes',
+              '${nbTickets * 200} millimes',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: isSelected
-                        ? const Color(0xFF0891B2)
-                        : const Color(0xFF4B5563),
+                    color: isSelected ? Color(0xFF0891B2) : Color(0xFF4B5563),
                   ),
             ),
           ],
