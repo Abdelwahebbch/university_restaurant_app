@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_universitaire/utilities/constants.dart';
 import 'package:restaurant_universitaire/widgets/balance_card.dart';
+import 'package:restaurant_universitaire/widgets/informations_modal.dart';
 import 'package:restaurant_universitaire/widgets/quick_actions.dart';
-
+import 'package:restaurant_universitaire/widgets/recharge_modal.dart';
+import 'package:restaurant_universitaire/widgets/payment_modal.dart';
+import 'package:restaurant_universitaire/widgets/success_message.dart';
 import 'history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,6 +21,31 @@ class _HomeScreenState extends State<HomeScreen> {
   bool showPayment = false;
   int selectedTickets = 1;
   bool paymentSuccess = false;
+
+  void handleRecharge(int t) {
+    setState(() {
+      selectedTickets = t;
+      showRecharge = false;
+      showPayment = true;
+    });
+  }
+
+  void handlePaymentSuccess() {
+    setState(() {
+      balance += selectedTickets;
+      showPayment = false;
+      paymentSuccess = true;
+    });
+
+    Future.delayed(Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          paymentSuccess = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Column(
               children: [
-                // Header avec design arrondi
                 Container(
                   decoration: const BoxDecoration(
                     color: Color(0xFF0891B2),
@@ -41,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(24.0),
                       child: Column(
                         children: [
-                          // Header avec titre et icône
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -95,8 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-
-                // Contenu principal
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(24.0),
@@ -124,8 +147,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
+                Expanded(child: InformationsWidget())
               ],
             ),
+            if (paymentSuccess) SuccessMessage(tickets: selectedTickets),
+            if (showRecharge)
+              RechargeModal(
+                  onClose: () {
+                    setState(() {
+                      showRecharge = false;
+                    });
+                  },
+                  onRecharge: handleRecharge),
+            if (showPayment)
+              PaymentModal(
+                  tickets: selectedTickets,
+                  onClose: () {
+                    setState(() {
+                      showPayment = false;
+                    });
+                  },
+                  onSuccess: handlePaymentSuccess),
           ],
         ),
       ),
