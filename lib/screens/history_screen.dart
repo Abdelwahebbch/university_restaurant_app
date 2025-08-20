@@ -67,7 +67,7 @@ class HistoryScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                        child: _InformationWidget(
+                        child: _informationWidget(
                       context,
                       'Ce mois',
                       '12 tickets',
@@ -77,7 +77,7 @@ class HistoryScreen extends StatelessWidget {
                     )),
                     SizedBox(width: 16),
                     Expanded(
-                      child: _InformationWidget(
+                      child: _informationWidget(
                         context,
                         'Ce mois',
                         '12 tickets',
@@ -89,13 +89,13 @@ class HistoryScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              _buildEmptyState(context)
+              _emptyState(context)
             ],
           ),
         ));
   }
 
-  Widget _InformationWidget(
+  Widget _informationWidget(
     BuildContext context,
     String period,
     String value,
@@ -147,7 +147,7 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _emptyState(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
