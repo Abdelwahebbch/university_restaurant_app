@@ -12,7 +12,7 @@ class _InformationsWidgetState extends State<InformationsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 25, 50, 25),
+      padding: EdgeInsets.fromLTRB(15, 25, 25, 25),
       margin: EdgeInsets.all(25),
       decoration: BoxDecoration(
           color: Color(0xFF0891B2).withValues(alpha: 0.1),
@@ -23,15 +23,15 @@ class _InformationsWidgetState extends State<InformationsWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Estimated waiting Time : ",
+                "Temps d'attente estimé : ",
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF4B5563),
-                ),
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF4B5563),
+                    fontSize: 20),
               ),
               Text(
-                "5",
-                style: TextStyle(fontWeight: FontWeight.w600),
+                "00 : 00",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               ),
             ],
           ),
@@ -44,13 +44,13 @@ class _InformationsWidgetState extends State<InformationsWidget> {
               Text(
                 "Votre Rang : ",
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF4B5563),
-                ),
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF4B5563),
+                    fontSize: 20),
               ),
               Text(
-                "155",
-                style: TextStyle(fontWeight: FontWeight.w600),
+                "999",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               ),
             ],
           )
