@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_universitaire/screens/history_screen.dart';
 import 'package:restaurant_universitaire/screens/home_screen.dart';
+import 'package:restaurant_universitaire/screens/login_screen.dart';
 import 'package:restaurant_universitaire/screens/splash_screen.dart';
 import 'package:restaurant_universitaire/theme/app_theme.dart';
+import 'screens/profile_screen.dart';
+import 'screens/about_screen.dart';
 
 void main() {
   runApp(const RestaurantApp());
@@ -47,6 +51,13 @@ class _RestaurantAppState extends State<RestaurantApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: _isLoading ? SplashScreen() : HomeScreen(),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/about': (context) => const AboutScreen(),
+        '/history': (context) => const HistoryScreen(),
+      },
     );
   }
 }
