@@ -5,7 +5,6 @@ import 'package:restaurant_universitaire/widgets/quick_actions.dart';
 import 'package:restaurant_universitaire/widgets/recharge_modal.dart';
 import 'package:restaurant_universitaire/widgets/payment_modal.dart';
 import 'package:restaurant_universitaire/widgets/success_message.dart';
-import 'history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,10 +16,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int balance = 0;
   bool showRecharge = false;
-  bool showHistory = false;
   bool showPayment = false;
   int selectedTickets = 1;
   bool paymentSuccess = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void handleRecharge(int t) {
     setState(() {
@@ -50,6 +49,57 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                leading:
+                    const Icon(Icons.home_outlined, color: Color(0xFF0891B2)),
+                title: const Text('Accueil'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading:
+                    const Icon(Icons.person_outline, color: Color(0xFF0891B2)),
+                title: const Text('Mon Profil'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/profile');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.history, color: Color(0xFF0891B2)),
+                title: const Text('Historique'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/history');
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading:
+                    const Icon(Icons.info_outline, color: Color(0xFF0891B2)),
+                title: const Text('À propos'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/about');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout, color: Colors.red),
+                title: const Text('Déconnexion'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/login');
+                },
+              ),
+            ],
+          ),
+        ),
         body: Stack(
           children: [
             Column(
@@ -70,6 +120,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _scaffoldKey.currentState?.openDrawer();
+                                },
+                                child: Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: const Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -98,22 +166,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                              Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: const Icon(
-                                  Icons.account_balance_wallet,
-                                  color: Colors.white,
-                                  size: 24,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/profile');
+                                },
+                                child: Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: 24),
                           BalanceCard(balance: balance),
                         ],
                       ),
@@ -126,23 +199,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         QuickActions(
-                          onHistoryPressed: () {
+                          /*  onHistoryPressed: () {
                             setState(() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const HistoryScreen()),
-                              );
+                              Navigator.pushNamed(context, '/history');
                             });
-                          },
+                          },*/
                           onRechargePressed: () {
                             setState(() {
                               showRecharge = true;
                             });
                           },
                         ),
-                        const SizedBox(height: 32),
+                        // SizedBox(height: 32),
                       ],
                     ),
                   ),
