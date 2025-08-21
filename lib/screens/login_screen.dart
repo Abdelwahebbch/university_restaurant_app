@@ -1,7 +1,9 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../theme/app_theme.dart';
-import 'home_screen.dart';
+import 'package:restaurant_universitaire/theme/app_theme.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,15 +15,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _cinController = TextEditingController();
-  final _passwordController = TextEditingController();
   final _specialCodeController = TextEditingController();
 
+  //bool _connectIssue = false;
   bool _isLoading = false;
 
   @override
   void dispose() {
     _cinController.dispose();
-    _passwordController.dispose();
     _specialCodeController.dispose();
     super.dispose();
   }
@@ -32,13 +33,20 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = true;
       });
 
-      // TODO : Connection Avec FireBase
-      await Future.delayed(const Duration(seconds: 2));
+      final response = await Supabase.instance.client
+          .from('users')
+          .select()
+          .eq('cin', _cinController.text)
+          .eq('code_sp', _specialCodeController.text);
 
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+      if (mounted && response.isNotEmpty) {
+        Navigator.pushNamed(context, '/home');
+        final session = Supabase.instance;
+      } else {
+        setState(() {
+          //_connectIssue = true;
+          _isLoading = false;
+        });
       }
     }
   }
@@ -121,6 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value.length != 8) {
                           return 'Le numéro CIN doit contenir 8 chiffres';
                         }
+                        // if (_connectIssue) {
+                        //   return 'CIN ou le code spéciale sont erroné ';
+                        // }
                         return null;
                       },
                     ),
@@ -141,6 +152,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value.length < 4) {
                           return 'Le code spécial doit contenir au moins 4 caractères';
                         }
+                        // if (_connectIssue) {
+                        //   return 'CIN ou le code spéciale sont erroné ';
+                        // }
                         return null;
                       },
                     ),
@@ -225,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
             prefixIcon:
                 Icon(icon, color: AppTheme.textColor.withValues(alpha: 0.6)),
             suffixIcon: suffixIcon,
-            filled: true,
+            filled: false,
             fillColor: AppTheme.cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
