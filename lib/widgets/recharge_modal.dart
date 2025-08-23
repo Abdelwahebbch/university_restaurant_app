@@ -31,119 +31,124 @@ class _RechargeModalState extends State<RechargeModal> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Recharger ma carte',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4B5563),
-                        ),
-                  ),
-                  IconButton(
-                    onPressed: widget.onClose,
-                    icon: Icon(Icons.close),
-                  ),
-                ],
-              ),
-              SizedBox(height: 25),
-              Text(
-                'Choisissez le nombre de tickets',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Color(0xFF4B5563),
-                    ),
-              ),
-              SizedBox(height: 15),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildTicketOption(1),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: _buildTicketOption(5),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: customController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: errorLabel,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  suffixText: 'tickets',
-                ),
-                onChanged: (x) {
-                  final nombreTic = int.tryParse(x);
-                  if (nombreTic != null && nombreTic > 0 && nombreTic <= 100) {
-                    setState(() {
-                      selectedTickets = nombreTic;
-                      errorLabel = "Nombre personnalisé";
-                    });
-                  } else {
-                    setState(() {
-                      errorLabel = "Saisie un nb <= 100 ";
-                    });
-                  }
-                },
-              ),
-              SizedBox(height: 24),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Résumé',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF4B5563),
-                          ),
+                      'Recharger ma carte',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4B5563),
+                              ),
                     ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('$selectedTickets ticket(s)'),
-                        Text(
-                          '${selectedTickets * 200} millimes',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ],
+                    IconButton(
+                      onPressed: widget.onClose,
+                      icon: Icon(Icons.close),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => widget.onRecharge(selectedTickets),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF0891B2),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                SizedBox(height: 25),
+                Text(
+                  'Choisissez le nombre de tickets',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Color(0xFF4B5563),
+                      ),
+                ),
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildTicketOption(1),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: _buildTicketOption(5),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: customController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: errorLabel,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    suffixText: 'tickets',
                   ),
-                  child: Text(
-                    'Continuer vers le paiement',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                  onChanged: (x) {
+                    final nombreTic = int.tryParse(x);
+                    if (nombreTic != null &&
+                        nombreTic > 0 &&
+                        nombreTic <= 100) {
+                      setState(() {
+                        selectedTickets = nombreTic;
+                        errorLabel = "Nombre personnalisé";
+                      });
+                    } else {
+                      setState(() {
+                        errorLabel = "Saisie un nb <= 100 ";
+                      });
+                    }
+                  },
+                ),
+                SizedBox(height: 24),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF9FAFB),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Résumé',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF4B5563),
+                            ),
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('$selectedTickets ticket(s)'),
+                          Text(
+                            '${selectedTickets * 200} millimes',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => widget.onRecharge(selectedTickets),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF0891B2),
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: Text(
+                      'Continuer vers le paiement',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
