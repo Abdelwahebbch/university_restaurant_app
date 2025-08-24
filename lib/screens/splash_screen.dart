@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_universitaire/main.dart';
+//import 'package:restaurant_universitaire/main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -9,22 +10,29 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  //final currentUser = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
-    _redirect();
+    // _redirect();
   }
 
   Future<void> _redirect() async {
-    await Future.delayed(Duration.zero);
-    final session = supabase.auth.currentSession;
-    if (!mounted) return;
+    //final session = supabase.auth.currentSession;
 
-    if (session != null) {
-      Navigator.of(context).pushReplacementNamed('/home');
-    } else {
-      Navigator.of(context).pushReplacementNamed('/login');
-    }
+    if (!mounted) return;
+    // if (session != null) {
+    //Navigator.of(context).pushReplacementNamed('/home');
+    // } else {
+    //   Navigator.of(context).pushReplacementNamed('/login');
+    // }
+
+    //if (currentUser != null) {
+    Navigator.of(context).pushReplacementNamed('/home');
+    // } else {
+    //   Navigator.of(context).pushReplacementNamed('/login');
+    //   print("Hello !! ");
+    // }
   }
 
   @override
