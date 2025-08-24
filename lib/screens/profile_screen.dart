@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+//import 'package:restaurant_universitaire/main.dart';
+//import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -8,17 +10,57 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String userName = "Abdelwaheb";
-  String userCin = "11189991";
-  String userUniversity = "Université de Gabes";
-  String userFaculty = "Faculté des sciences de Gabes";
-  String userNiveau = "3ème année Licence";
+  Map<String, dynamic>? data;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    try {
+      // final response = await Supabase.instance.client
+      //     .from('profiles')
+      //     .select()
+      //     .eq('id', supabase.auth.currentUser?.id as Object)
+      //     .single();
+
+      if (mounted) {
+        setState(() {
+          // data = response;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final userName = data?['name'] ?? "Not Available";
+    final userCin = data?['cin'] ?? "Not Available";
+    final userUniversity = data?['university'] ?? "Not Available";
+    final userFaculty = data?['faculty'] ?? "Not Available";
+    final userNiveau = data?['niveau'] ?? "Not Available";
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          // ===== Header =====
           Container(
             decoration: const BoxDecoration(
               color: Color(0xFF0891B2),
@@ -32,15 +74,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
-                    // Header avec titre et bouton retour
                     Row(
                       children: [
                         IconButton(
                           onPressed: () => Navigator.pop(context),
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.white),
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -57,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 32),
 
-                    // Photo de profil
+                    // Avatar
                     Container(
                       width: 100,
                       height: 100,
@@ -69,13 +108,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 3,
                         ),
                       ),
-                      child: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 50,
-                      ),
+                      child: const Icon(Icons.person,
+                          color: Colors.white, size: 50),
                     ),
                     const SizedBox(height: 16),
+
+                    // User name
                     Text(
                       userName,
                       style:
@@ -95,12 +133,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+
+          // ===== Content =====
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
-                  // Informations personnelles
                   _buildInfoSection(
                     context,
                     'Informations Personnelles',
@@ -115,10 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context, 'Niveau', userNiveau, Icons.grade),
                     ],
                   ),
-
                   const SizedBox(height: 32),
 
-                  // Statistiques
                   _buildInfoSection(
                     context,
                     'Statistiques',
@@ -131,9 +168,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Icons.calendar_today),
                     ],
                   ),
-
                   const SizedBox(height: 32),
 
+                  // Logout button
                   Container(
                     width: double.infinity,
                     height: 56,
@@ -146,21 +183,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        // TODO :  Logique de déconnexion
-                        Navigator.pushReplacementNamed(context, '/login');
+                        //  await supabase.auth.signOut();
+                        if (mounted) {
+                          Navigator.pushReplacementNamed(context, '/login');
+                        }
                       },
-                      style: TextButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            Icons.logout,
-                            color: Color(0xFFEC4899),
-                          ),
+                          const Icon(Icons.logout, color: Color(0xFFEC4899)),
                           const SizedBox(width: 8),
                           Text(
                             'Se déconnecter',
@@ -176,7 +207,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
                 ],
               ),
@@ -187,6 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // === Reusable UI Widgets ===
   Widget _buildInfoSection(
       BuildContext context, String title, List<Widget> items) {
     return Column(
@@ -217,10 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   item,
                   if (index < items.length - 1)
-                    const Divider(
-                      height: 1,
-                      color: Color(0xFFE2E8F0),
-                    ),
+                    const Divider(height: 1, color: Color(0xFFE2E8F0)),
                 ],
               );
             }).toList(),
@@ -243,32 +271,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: const Color(0xFF0891B2).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(
-              icon,
-              color: const Color(0xFF0891B2),
-              size: 20,
-            ),
+            child: Icon(icon, color: const Color(0xFF0891B2), size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF64748B),
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
+                Text(label,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFF64748B),
+                          fontWeight: FontWeight.w500,
+                        )),
                 const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: const Color(0xFF1F2937),
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
+                Text(value,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: const Color(0xFF1F2937),
+                          fontWeight: FontWeight.w600,
+                        )),
               ],
             ),
           ),
