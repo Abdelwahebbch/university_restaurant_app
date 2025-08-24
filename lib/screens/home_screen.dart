@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_universitaire/widgets/balance_card.dart';
 import 'package:restaurant_universitaire/widgets/informations_modal.dart';
@@ -5,6 +7,8 @@ import 'package:restaurant_universitaire/widgets/quick_actions.dart';
 import 'package:restaurant_universitaire/widgets/recharge_modal.dart';
 import 'package:restaurant_universitaire/widgets/payment_modal.dart';
 import 'package:restaurant_universitaire/widgets/success_message.dart';
+
+//import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -95,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushReplacementNamed(context, '/login');
+                  //final session = supabase.auth.signOut();
                 },
               ),
             ],
@@ -215,7 +220,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                Expanded(child: InformationsWidget())
+                InformationsWidget(
+                  initialWaitingTime: Duration(seconds: 10),
+                  rank: 100,
+                )
               ],
             ),
             if (paymentSuccess) SuccessMessage(tickets: selectedTickets),
