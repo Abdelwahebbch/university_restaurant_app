@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:restaurant_universitaire/screens/history_screen.dart';
 import 'package:restaurant_universitaire/screens/home_screen.dart';
 import 'package:restaurant_universitaire/screens/login_screen.dart';
@@ -9,15 +11,10 @@ import 'screens/profile_screen.dart';
 import 'screens/about_screen.dart';
 
 void main() async {
-  await Supabase.initialize(
-    url: 'https://sqjciedukstpzofrsqva.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxamNpZWR1a3N0cHpvZnJzcXZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2Njk3NzksImV4cCI6MjA3MTI0NTc3OX0.K5IhIXjKqeqRq2-C_15I5nGGvKNER9Si61dGUAwduvs',
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(RestaurantApp());
 }
-
-final supabase = Supabase.instance.client;
 
 class RestaurantApp extends StatefulWidget {
   const RestaurantApp({super.key});
@@ -27,15 +24,42 @@ class RestaurantApp extends StatefulWidget {
 }
 
 class _RestaurantAppState extends State<RestaurantApp> {
-  bool _isLoading = true;
+  User? currentUser;
+  bool _isReady = false;
+  Map<String, dynamic>? userData;
+
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
     super.initState();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    // Get the current user
+    currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      // Wait for Firestore document to load
+      String docId = currentUser!.email!;
+      final docRef =
+          FirebaseFirestore.instance.collection('userProfile').doc(docId);
+
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        userData = docSnapshot.data();
+        print('Document data: $userData');
+      } else {
+        print('No document found with ID: $docId');
+      }
+    }
+
+    // After everything is done, update state
+    if (mounted) {
+      setState(() {
+        _isReady = true;
+      });
+    }
   }
 
   @override
@@ -44,11 +68,21 @@ class _RestaurantAppState extends State<RestaurantApp> {
       title: 'Restaurant Universitaire Wahat',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: _isLoading ? SplashScreen() : LoginScreen(),
+      home: !_isReady
+          ? const SplashScreen()
+          : (currentUser != null
+              ? HomeScreen(
+                  userData: userData,
+                )
+              : const LoginScreen()),
       routes: {
         '/login': (context) => const LoginScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/home': (context) => HomeScreen(
+              userData: userData,
+            ),
+        '/profile': (context) => ProfileScreen(
+              userData: userData,
+            ),
         '/about': (context) => const AboutScreen(),
         '/history': (context) => const HistoryScreen(),
       },

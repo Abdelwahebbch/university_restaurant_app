@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:restaurant_universitaire/main.dart';
 //import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final Map<String, dynamic>? userData;
+  const ProfileScreen({super.key, this.userData});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -16,30 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
-  }
-
-  Future<void> getData() async {
-    try {
-      // final response = await Supabase.instance.client
-      //     .from('profiles')
-      //     .select()
-      //     .eq('id', supabase.auth.currentUser?.id as Object)
-      //     .single();
-
-      if (mounted) {
-        setState(() {
-          // data = response;
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
+    data = widget.userData;
   }
 
   @override
@@ -50,11 +29,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    final userName = data?['name'] ?? "Not Available";
-    final userCin = data?['cin'] ?? "Not Available";
-    final userUniversity = data?['university'] ?? "Not Available";
-    final userFaculty = data?['faculty'] ?? "Not Available";
-    final userNiveau = data?['niveau'] ?? "Not Available";
+    final userName = data?['NAME'] ?? "Not Available !";
+    final userCin = data?['CIN'] ?? "Not Available";
+    final userUniversity = data?['UNIV'] ?? "Not Available";
+    final userFaculty = data?['FAC'] ?? "Not Available";
+    final userNiveau = data?['NIV'] ?? "Not Available";
+    final specialite = data?['SPEC'] ?? "Not Available";
+    final repas = data?['REP_MOIS'] ?? "Not Available";
+    final membreDepuis = data?['Membre_Depuis'] ?? "Not Available";
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -123,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                     ),
                     Text(
-                      'Étudiant en Informatique',
+                      'Étudiant en $specialite',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Colors.white.withValues(alpha: 0.8),
                           ),
@@ -160,11 +142,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context,
                     'Statistiques',
                     [
-                      _buildInfoItem(context, 'Repas ce mois', '23 repas',
+                      _buildInfoItem(context, 'Repas ce mois', '$repas repas',
                           Icons.restaurant),
-                      _buildInfoItem(context, 'Total dépensé', '4600 millimes',
+                      _buildInfoItem(
+                          context,
+                          'Total dépensé',
+                          '${repas * 200} millimes',
                           Icons.account_balance_wallet),
-                      _buildInfoItem(context, 'Membre depuis', 'Septembre 2023',
+                      _buildInfoItem(context, 'Membre depuis', membreDepuis,
                           Icons.calendar_today),
                     ],
                   ),
@@ -184,6 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: TextButton(
                       onPressed: () {
                         //  await supabase.auth.signOut();
+                        FirebaseAuth.instance.signOut();
                         if (mounted) {
                           Navigator.pushReplacementNamed(context, '/login');
                         }

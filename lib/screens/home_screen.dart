@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:restaurant_universitaire/widgets/balance_card.dart';
 import 'package:restaurant_universitaire/widgets/informations_modal.dart';
@@ -8,22 +8,31 @@ import 'package:restaurant_universitaire/widgets/recharge_modal.dart';
 import 'package:restaurant_universitaire/widgets/payment_modal.dart';
 import 'package:restaurant_universitaire/widgets/success_message.dart';
 
-//import '../main.dart';
-
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Map<String, dynamic>? userData;
+  const HomeScreen({super.key, required this.userData});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Map<String, dynamic>? data;
+
+  @override
+  void initState() {
+    super.initState();
+    data = widget.userData;
+    balance = data != null ? (data!['Solde'] ?? 0) : 0;
+  }
+
   int balance = 0;
   bool showRecharge = false;
   bool showPayment = false;
   int selectedTickets = 1;
   bool paymentSuccess = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final session = FirebaseAuth.instance;
 
   void handleRecharge(int t) {
     setState(() {
@@ -100,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pop(context);
                   Navigator.pushReplacementNamed(context, '/login');
                   //final session = supabase.auth.signOut();
+                  session.signOut();
                 },
               ),
             ],
