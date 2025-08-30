@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:restaurant_universitaire/screens/profile_screen.dart';
+import 'package:restaurant_universitaire/widgets/failure_message.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_universitaire/widgets/balance_card.dart';
 import 'package:restaurant_universitaire/widgets/informations_modal.dart';
@@ -8,31 +10,33 @@ import 'package:restaurant_universitaire/widgets/recharge_modal.dart';
 import 'package:restaurant_universitaire/widgets/payment_modal.dart';
 import 'package:restaurant_universitaire/widgets/success_message.dart';
 
+import 'package:restaurant_universitaire/models/student_model.dart';
+
 class HomeScreen extends StatefulWidget {
-  final Map<String, dynamic>? userData;
-  const HomeScreen({super.key, required this.userData});
+  final Student student;
+  const HomeScreen({super.key, required this.student});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Map<String, dynamic>? data;
-
-  @override
-  void initState() {
-    super.initState();
-    data = widget.userData;
-    balance = data != null ? (data!['Solde'] ?? 0) : 0;
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final session = FirebaseAuth.instance;
+  late String studentID = "${widget.student.cin}@gmail.com";
 
   int balance = 0;
   bool showRecharge = false;
   bool showPayment = false;
   int selectedTickets = 1;
   bool paymentSuccess = false;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final session = FirebaseAuth.instance;
+  bool paymentFailed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    balance = widget.student.solde;
+  }
 
   void handleRecharge(int t) {
     setState(() {
@@ -42,17 +46,38 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void handlePaymentSuccess() {
+  void handlePaymentSuccess() async {
     setState(() {
       balance += selectedTickets;
       showPayment = false;
       paymentSuccess = true;
     });
-
+    await FirebaseFirestore.instance
+        .collection('userProfile')
+        .doc(studentID)
+        .update({
+      'Solde': balance,
+      'TotalDepense': widget.student.totalDepense + selectedTickets * 200
+    });
     Future.delayed(Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
           paymentSuccess = false;
+        });
+      }
+    });
+  }
+
+  void handlePaymentFailed() async {
+    setState(() {
+      showPayment = false;
+      paymentFailed = true;
+    });
+
+    Future.delayed(Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          paymentFailed = false;
         });
       }
     });
@@ -81,7 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: const Text('Mon Profil'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/profile');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProfileScreen(student: widget.student)));
                 },
               ),
               ListTile(
@@ -183,7 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/profile');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProfileScreen(
+                                              student: widget.student)));
                                 },
                                 child: Container(
                                   width: 48,
@@ -237,6 +270,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             if (paymentSuccess) SuccessMessage(tickets: selectedTickets),
+            if (paymentFailed)
+              FailureMessage(
+                message: 'Failed to recharge :(',
+              ),
             if (showRecharge)
               RechargeModal(
                   onClose: () {
@@ -247,13 +284,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   onRecharge: handleRecharge),
             if (showPayment)
               PaymentModal(
-                  tickets: selectedTickets,
-                  onClose: () {
-                    setState(() {
-                      showPayment = false;
-                    });
-                  },
-                  onSuccess: handlePaymentSuccess),
+                tickets: selectedTickets,
+                onClose: () {
+                  setState(() {
+                    showPayment = false;
+                  });
+                },
+                onSuccess: handlePaymentSuccess,
+                onFailure: handlePaymentFailed,
+              ),
           ],
         ),
       ),
