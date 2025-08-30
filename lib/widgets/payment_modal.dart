@@ -5,12 +5,13 @@ class PaymentModal extends StatefulWidget {
   final int tickets;
   final VoidCallback onClose;
   final VoidCallback onSuccess;
-
+  final VoidCallback onFailure;
   const PaymentModal({
     super.key,
     required this.tickets,
     required this.onClose,
     required this.onSuccess,
+    required this.onFailure,
   });
 
   @override
@@ -41,6 +42,9 @@ class _PaymentModalState extends State<PaymentModal> {
           _isProcessing = false;
         });
         widget.onSuccess();
+        //  widget.onFailure();
+
+        //TODO : tester le code retourner depuis l'API
       }
     }
   }
