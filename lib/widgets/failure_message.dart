@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FailureMessage extends StatelessWidget {
-  const FailureMessage({super.key});
+  final String message;
+  const FailureMessage({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +24,20 @@ class FailureMessage extends StatelessWidget {
           ],
         ),
         child: Row(
-          children: const [
-            Icon(
+          children: [
+            const Icon(
               Icons.close,
               color: Colors.white,
               size: 24,
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "You Dont have an Account !",
-                    style: TextStyle(
+                    message,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
