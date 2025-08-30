@@ -10,6 +10,20 @@ class Student {
   final String membreDepuis;
   final int solde;
 
+  factory Student.emptyStudent() {
+    return Student(
+        name: "Not Available !",
+        specialite: "Not Available !",
+        cin: "Not Available !",
+        solde: 0,
+        faculty: "Not Available !",
+        university: "Not Available !",
+        level: "Not Available !",
+        nbRepas: 0,
+        totalDepense: 0,
+        membreDepuis: "Not Available !");
+  }
+
   Student(
       {required this.name,
       required this.specialite,
