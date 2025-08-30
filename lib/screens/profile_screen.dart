@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:restaurant_universitaire/main.dart';
 //import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:restaurant_universitaire/models/student_model.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Map<String, dynamic>? userData;
-  const ProfileScreen({super.key, this.userData});
+  final Student student;
+  const ProfileScreen({super.key, required this.student});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -13,12 +13,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Map<String, dynamic>? data;
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    data = widget.userData;
+    data = widget.student.toFirestore();
   }
 
   @override
@@ -29,20 +29,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    final userName = data?['NAME'] ?? "Not Available !";
-    final userCin = data?['CIN'] ?? "Not Available";
-    final userUniversity = data?['UNIV'] ?? "Not Available";
-    final userFaculty = data?['FAC'] ?? "Not Available";
-    final userNiveau = data?['NIV'] ?? "Not Available";
-    final specialite = data?['SPEC'] ?? "Not Available";
-    final repas = data?['REP_MOIS'] ?? "Not Available";
-    final membreDepuis = data?['Membre_Depuis'] ?? "Not Available";
+    final userName = data?['Name'] ?? "Not Available !";
+    final userCin = data?['Cin'] ?? "Not Available";
+    final userUniversity = data?['University'] ?? "Not Available";
+    final userFaculty = data?['Faculty'] ?? "Not Available";
+    final userNiveau = data?['Level'] ?? "Not Available";
+    final specialite = data?['Specialite'] ?? "Not Available";
+    final repas = data?['NbRepas'] ?? "Not Available";
+    final membreDepuis = data?['MembreDepuis'] ?? "Not Available";
+    final totalDepense = data?['TotalDepense'] ?? "Not Available";
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // ===== Header =====
           Container(
             decoration: const BoxDecoration(
               color: Color(0xFF0891B2),
@@ -77,8 +77,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 32),
-
-                    // Avatar
                     Container(
                       width: 100,
                       height: 100,
@@ -94,8 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Colors.white, size: 50),
                     ),
                     const SizedBox(height: 16),
-
-                    // User name
                     Text(
                       userName,
                       style:
@@ -115,8 +111,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-
-          // ===== Content =====
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
@@ -137,7 +131,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 32),
-
                   _buildInfoSection(
                     context,
                     'Statistiques',
@@ -147,15 +140,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _buildInfoItem(
                           context,
                           'Total dépensé',
-                          '${repas * 200} millimes',
+                          '$totalDepense millimes',
                           Icons.account_balance_wallet),
                       _buildInfoItem(context, 'Membre depuis', membreDepuis,
                           Icons.calendar_today),
                     ],
                   ),
                   const SizedBox(height: 32),
-
-                  // Logout button
                   Container(
                     width: double.infinity,
                     height: 56,
@@ -203,7 +194,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // === Reusable UI Widgets ===
   Widget _buildInfoSection(
       BuildContext context, String title, List<Widget> items) {
     return Column(
