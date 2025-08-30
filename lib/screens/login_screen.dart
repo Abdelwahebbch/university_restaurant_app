@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_final_fields
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:restaurant_universitaire/screens/home_screen.dart';
 import 'package:restaurant_universitaire/theme/app_theme.dart';
 import 'package:restaurant_universitaire/widgets/failure_message.dart';
-//import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:restaurant_universitaire/models/student_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,16 +18,32 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _cinController = TextEditingController();
   final _specialCodeController = TextEditingController();
-  //final supabase = Supabase.instance.client;
   final _auth = FirebaseAuth.instance;
+
   bool _connectIssue = false;
   bool _isLoading = false;
+
+  Student? student;
 
   @override
   void dispose() {
     _cinController.dispose();
     _specialCodeController.dispose();
     super.dispose();
+  }
+
+  Future<Student?> fetchStudent() async {
+    final uid = FirebaseAuth.instance.currentUser?.email;
+    if (uid == null) return null;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('userProfile')
+        .doc(uid)
+        .get();
+
+    if (!doc.exists) return Student.emptyStudent();
+    var data = doc.data();
+    return Student.fromFireStore(data!);
   }
 
   Future<void> _handleLogin() async {
@@ -38,17 +54,17 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        // final res = await supabase.auth.signInWithPassword(
-        //   email: "${_cinController.text}@gmail.com",
-        //   password: _specialCodeController.text,
-        // );
-
         await _auth.signInWithEmailAndPassword(
             email: "${_cinController.text}@gmail.com",
             password: _specialCodeController.text);
 
+        student = await fetchStudent();
+
         if (mounted && _auth.currentUser != null) {
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return HomeScreen(student: student!);
+          }));
         }
       } catch (e) {
         if (mounted) {
@@ -57,7 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
             _isLoading = false;
           });
         }
-
         Future.delayed(const Duration(seconds: 3), () {
           if (mounted) {
             setState(() {
@@ -82,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 60),
-                  // Logo et titre
                   Column(
                     children: [
                       Container(
@@ -121,7 +135,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 50),
                   Form(
                     key: _formKey,
@@ -211,7 +224,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-        if (_connectIssue) FailureMessage(),
+        if (_connectIssue)
+          FailureMessage(
+            message: "You Dont have an Account !",
+          ),
       ]),
     );
   }

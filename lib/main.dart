@@ -9,6 +9,7 @@ import 'package:restaurant_universitaire/screens/splash_screen.dart';
 import 'package:restaurant_universitaire/theme/app_theme.dart';
 import 'screens/profile_screen.dart';
 import 'screens/about_screen.dart';
+import 'package:restaurant_universitaire/models/student_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,8 @@ class RestaurantApp extends StatefulWidget {
 
 class _RestaurantAppState extends State<RestaurantApp> {
   User? currentUser;
+  Student? student;
   bool _isReady = false;
-  Map<String, dynamic>? userData;
 
   @override
   void initState() {
@@ -34,27 +35,25 @@ class _RestaurantAppState extends State<RestaurantApp> {
     _initialize();
   }
 
+  Future<Student?> fetchStudent() async {
+    final uid = FirebaseAuth.instance.currentUser?.email;
+    if (uid == null) return null;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('userProfile')
+        .doc(uid)
+        .get();
+
+    if (!doc.exists) return Student.emptyStudent();
+    var data = doc.data();
+    return Student.fromFireStore(data!);
+  }
+
   Future<void> _initialize() async {
-    // Get the current user
     currentUser = FirebaseAuth.instance.currentUser;
 
-    if (currentUser != null) {
-      // Wait for Firestore document to load
-      String docId = currentUser!.email!;
-      final docRef =
-          FirebaseFirestore.instance.collection('userProfile').doc(docId);
+    student = await fetchStudent();
 
-      final docSnapshot = await docRef.get();
-
-      if (docSnapshot.exists) {
-        userData = docSnapshot.data();
-        print('Document data: $userData');
-      } else {
-        print('No document found with ID: $docId');
-      }
-    }
-
-    // After everything is done, update state
     if (mounted) {
       setState(() {
         _isReady = true;
@@ -72,16 +71,16 @@ class _RestaurantAppState extends State<RestaurantApp> {
           ? const SplashScreen()
           : (currentUser != null
               ? HomeScreen(
-                  userData: userData,
+                  student: student!,
                 )
               : const LoginScreen()),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/home': (context) => HomeScreen(
-              userData: userData,
+              student: student!,
             ),
         '/profile': (context) => ProfileScreen(
-              userData: userData,
+              student: student!,
             ),
         '/about': (context) => const AboutScreen(),
         '/history': (context) => const HistoryScreen(),
