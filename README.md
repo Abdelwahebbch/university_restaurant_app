@@ -44,14 +44,14 @@ WahatApp permet aux étudiants de gérer facilement leur carte restaurant univer
 
 ## 📦 Dépendances
 
-\`\`\`yaml
+```yaml
 dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.2
-\`\`\`
+```
 
 ## 🚀 Installation
 
@@ -64,20 +64,20 @@ dependencies:
 ### Étapes d'installation
 
 1. **Cloner le repository**
-\`\`\`bash
+```bash
 git clone https://github.com/votre-username/university_restaurant_app.git
 cd university_restaurant_app
-\`\`\`
+```
 
 2. **Installer les dépendances**
-\`\`\`bash
+```bash
 flutter pub get
-\`\`\`
+```
 
 3. **Lancer l'application**
-\`\`\`bash
+```bash
 flutter run
-\`\`\`
+```
 
 ## 📱 Captures d'écran
 
@@ -87,7 +87,7 @@ flutter run
 
 ## 🏗️ Structure du Projet
 
-\`\`\`
+```
 lib/
 ├── main.dart                 # Point d'entrée de l'application
 ├── models/
@@ -105,7 +105,7 @@ lib/
     ├── payment_modal.dart    # Modal de paiement
     ├── success_message.dart  # Message de succès
     └── transaction_item.dart # Item de transaction
-\`\`\`
+```
 
 ## 💰 Système de Paiement
 
@@ -119,10 +119,10 @@ lib/
 ### Variables d'environnement
 Créez un fichier `.env` à la racine du projet :
 
-\`\`\`env
+```env
 PAYMENT_API_URL=https://api.payment-provider.com
 API_KEY=your_api_key_here
-\`\`\`
+```
 
 ### Configuration Firebase 
 
@@ -131,13 +131,13 @@ API_KEY=your_api_key_here
 
 ## 🧪 Tests
 
-\`\`\`bash
+```bash
 # Tests unitaires
 flutter test
 
 # Tests d'intégration
 flutter test integration_test/
-\`\`\`
+```
 
 ## 📈 Roadmap
 
