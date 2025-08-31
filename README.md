@@ -48,9 +48,14 @@ WahatApp permet aux étudiants de gérer facilement leur carte restaurant univer
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.9
-  cupertino_icons: ^1.0.2
+  mask_text_input_formatter: ^2.9.0
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.0.1
+  cloud_firestore: ^6.0.0
+  firebase_database: ^12.0.0
 ```
 
 ## 🚀 Installation
@@ -65,7 +70,7 @@ dependencies:
 
 1. **Cloner le repository**
 ```bash
-git clone https://github.com/votre-username/university_restaurant_app.git
+git clone https://github.com/Abdelwahebbch/university_restaurant_app.git
 cd university_restaurant_app
 ```
 
@@ -89,22 +94,28 @@ flutter run
 
 ```
 lib/
-├── main.dart                 # Point d'entrée de l'application
+├── main.dart                
 ├── models/
-│   └── transaction.dart      # Modèle de données des transactions
+│   ├── Student_model.dart
+│   └── transaction.dart     
 ├── screens/
-│   ├── home_screen.dart      # Écran principal
-│   └── history_screen.dart   # Écran historique
+│   ├── about_screen.dart
+│   ├── history_screen.dart
+│   ├── home_screen.dart
+│   ├── login_screen.dart
+│   ├── profile_screen.dart      
+│   └── splash_screen.dart  
 ├── theme/
-│   └── app_theme.dart        # Thème et couleurs de l'app
+│   └── app_theme.dart       
 └── widgets/
-    ├── balance_card.dart     # Carte d'affichage du solde
-    ├── information_card.dart # Carte pour afficher des informations utiles 
-    ├── quick_actions.dart    # Boutons d'actions rapides
-    ├── recharge_modal.dart   # Modal de recharge
-    ├── payment_modal.dart    # Modal de paiement
-    ├── success_message.dart  # Message de succès
-    └── transaction_item.dart # Item de transaction
+    ├── balance_card.dart
+    ├── failure_message.dart
+    ├── information_card.dart 
+    ├── quick_actions.dart   
+    ├── recharge_modal.dart  
+    ├── payment_modal.dart   
+    ├── success_message.dart  
+    └── transaction_item.dart 
 ```
 
 ## 💰 Système de Paiement
