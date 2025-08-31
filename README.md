@@ -83,7 +83,7 @@ flutter run
 
 | Écran Principal | Recharge | Historique |
 |----------------|----------|------------|
-| ![Home](images/AppLogo.png) | ![Recharge](screenshots/recharge.png) | ![History](screenshots/history.png) |
+| ![Login](images/login.png) | ![Home](images/home.png) | ![Profile](images/profile.png) |
 
 ## 🏗️ Structure du Projet
 
