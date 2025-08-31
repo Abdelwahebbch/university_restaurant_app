@@ -1,4 +1,4 @@
-# WahatApp - Application mobile pour la gestion d'un restaurant universitaire 🍽️
+# WahatApp واحات - Application mobile pour la gestion d'un restaurant universitaire 🍽️
 
 Une application mobile moderne développée en Flutter pour faciliter et numériser l'obtention des repas au restaurant universitaire pour les étudiants tunisiens.
 
