@@ -81,7 +81,7 @@ flutter run
 
 ## 📱 Captures d'écran
 
-| Écran Principal | Recharge | Historique |
+| Login Screen | Home Screen | Profile Screen |
 |----------------|----------|------------|
 | ![Login](images/login.png) | ![Home](images/home.png) | ![Profile](images/profile.png) |
 
