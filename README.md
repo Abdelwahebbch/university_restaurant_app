@@ -1,4 +1,4 @@
-# WahatApp - Application mobile pour la gestion d'un restaurant universitaire 🍽️
+# WahatApp واحات - Application mobile pour la gestion d'un restaurant universitaire 🍽️
 
 Une application mobile moderne développée en Flutter pour faciliter et numériser l'obtention des repas au restaurant universitaire pour les étudiants tunisiens.
 
@@ -44,14 +44,19 @@ WahatApp permet aux étudiants de gérer facilement leur carte restaurant univer
 
 ## 📦 Dépendances
 
-\`\`\`yaml
+```yaml
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.9
-  cupertino_icons: ^1.0.2
-\`\`\`
+  mask_text_input_formatter: ^2.9.0
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.0.1
+  cloud_firestore: ^6.0.0
+  firebase_database: ^12.0.0
+```
 
 ## 🚀 Installation
 
@@ -64,48 +69,54 @@ dependencies:
 ### Étapes d'installation
 
 1. **Cloner le repository**
-\`\`\`bash
-git clone https://github.com/votre-username/university_restaurant_app.git
+```bash
+git clone https://github.com/Abdelwahebbch/university_restaurant_app.git
 cd university_restaurant_app
-\`\`\`
+```
 
 2. **Installer les dépendances**
-\`\`\`bash
+```bash
 flutter pub get
-\`\`\`
+```
 
 3. **Lancer l'application**
-\`\`\`bash
+```bash
 flutter run
-\`\`\`
+```
 
 ## 📱 Captures d'écran
 
-| Écran Principal | Recharge | Historique |
+| Login Screen | Home Screen | Profile Screen |
 |----------------|----------|------------|
-| ![Home](images/AppLogo.png) | ![Recharge](screenshots/recharge.png) | ![History](screenshots/history.png) |
+| ![Login](images/login.png) | ![Home](images/home.png) | ![Profile](images/profile.png) |
 
 ## 🏗️ Structure du Projet
 
-\`\`\`
+```
 lib/
-├── main.dart                 # Point d'entrée de l'application
+├── main.dart                
 ├── models/
-│   └── transaction.dart      # Modèle de données des transactions
+│   ├── Student_model.dart
+│   └── transaction.dart     
 ├── screens/
-│   ├── home_screen.dart      # Écran principal
-│   └── history_screen.dart   # Écran historique
+│   ├── about_screen.dart
+│   ├── history_screen.dart
+│   ├── home_screen.dart
+│   ├── login_screen.dart
+│   ├── profile_screen.dart      
+│   └── splash_screen.dart  
 ├── theme/
-│   └── app_theme.dart        # Thème et couleurs de l'app
+│   └── app_theme.dart       
 └── widgets/
-    ├── balance_card.dart     # Carte d'affichage du solde
-    ├── information_card.dart # Carte pour afficher des informations utiles 
-    ├── quick_actions.dart    # Boutons d'actions rapides
-    ├── recharge_modal.dart   # Modal de recharge
-    ├── payment_modal.dart    # Modal de paiement
-    ├── success_message.dart  # Message de succès
-    └── transaction_item.dart # Item de transaction
-\`\`\`
+    ├── balance_card.dart
+    ├── failure_message.dart
+    ├── information_card.dart 
+    ├── quick_actions.dart   
+    ├── recharge_modal.dart  
+    ├── payment_modal.dart   
+    ├── success_message.dart  
+    └── transaction_item.dart 
+```
 
 ## 💰 Système de Paiement
 
@@ -119,10 +130,10 @@ lib/
 ### Variables d'environnement
 Créez un fichier `.env` à la racine du projet :
 
-\`\`\`env
+```env
 PAYMENT_API_URL=https://api.payment-provider.com
 API_KEY=your_api_key_here
-\`\`\`
+```
 
 ### Configuration Firebase 
 
@@ -131,13 +142,13 @@ API_KEY=your_api_key_here
 
 ## 🧪 Tests
 
-\`\`\`bash
+```bash
 # Tests unitaires
 flutter test
 
 # Tests d'intégration
 flutter test integration_test/
-\`\`\`
+```
 
 ## 📈 Roadmap
 
@@ -155,11 +166,10 @@ Les contributions sont les bienvenues ! Veuillez suivre ces étapes :
 3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
 4. Push vers la branche (`git push origin feature/AmazingFeature`)
 5. Ouvrez une Pull Request
-<!--
+   
 ## 📄 Licence
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
--->
 ## 👥 Équipe
 
 - **Développeur Principal** : [Abdelwaheb Bouchahwa](https://github.com/Abdelwahebbch)
