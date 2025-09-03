@@ -71,7 +71,6 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Fonctionnalités
             _buildSection(
               context,
               'Fonctionnalités',
@@ -81,7 +80,6 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Contact
             _buildSection(
               context,
               'Contact',
@@ -91,11 +89,10 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Développé par
             _buildSection(
               context,
               'Développement',
-              "Wahat App est une application développée par un groupe d’étudiants dans le cadre d’un projet de fin d’études pour l’année universitaire 2025/2026. \nÉquipe de développement : \n - Abdelwaheb Bouchahwa \n - Houssem Bettaieb \n - Aziz Boujlida \n - Ahmed Gammoudi",
+              "Wahat App est une application développée par Abdelwaheb Bouchahwa dans le cadre d’un projet de fin d’études pour l’année universitaire 2025/2026. ",
               Icons.code_outlined,
             ),
           ],
