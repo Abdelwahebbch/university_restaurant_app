@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:restaurant_universitaire/screens/profile_screen.dart';
 import 'package:restaurant_universitaire/widgets/failure_message.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:restaurant_universitaire/widgets/quick_actions.dart';
 import 'package:restaurant_universitaire/widgets/recharge_modal.dart';
 import 'package:restaurant_universitaire/widgets/payment_modal.dart';
 import 'package:restaurant_universitaire/widgets/success_message.dart';
-
 import 'package:restaurant_universitaire/models/student_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,18 +24,36 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final session = FirebaseAuth.instance;
   late String studentID = "${widget.student.cin}@gmail.com";
+  FirebaseDatabase database = FirebaseDatabase.instance;
 
+  final rtdb = FirebaseDatabase.instanceFor(
+          app: FirebaseDatabase.instance.app,
+          databaseURL:
+              ' https://wahatapplication-default-rtdb.europe-west1.firebasedatabase.app')
+      .ref();
   int balance = 0;
   bool showRecharge = false;
   bool showPayment = false;
   int selectedTickets = 1;
   bool paymentSuccess = false;
   bool paymentFailed = false;
+  //Todo
+  int? rang = 1;
 
   @override
   void initState() {
     super.initState();
+    listenUsers();
     balance = widget.student.solde;
+  }
+
+  Future<void> listenUsers() async {
+    rtdb.child("rang").child("value").onValue.listen((event) {
+      final data = event.snapshot.value;
+      setState(() {
+        rang = data! as int;
+      });
+    });
   }
 
   void handleRecharge(int t) {
@@ -264,8 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 InformationsWidget(
-                  initialWaitingTime: Duration(seconds: 10),
-                  rank: 100,
+                  rank: rang!,
                 )
               ],
             ),
