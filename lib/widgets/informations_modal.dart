@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class InformationsWidget extends StatefulWidget {
-  final Duration initialWaitingTime;
+  // final Duration initialWaitingTime;
   final int rank;
+  // final int duration;
 
   const InformationsWidget({
     super.key,
-    required this.initialWaitingTime,
     required this.rank,
   });
 
@@ -22,7 +22,7 @@ class _InformationsWidgetState extends State<InformationsWidget> {
   @override
   void initState() {
     super.initState();
-    remainingTime = widget.initialWaitingTime;
+    remainingTime = Duration(minutes: widget.rank * 2);
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (remainingTime.inSeconds > 0) {
@@ -33,6 +33,27 @@ class _InformationsWidgetState extends State<InformationsWidget> {
         timer.cancel();
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant InformationsWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.rank != widget.rank) {
+      setState(() {
+        remainingTime = Duration(minutes: widget.rank * 2);
+      });
+      _timer?.cancel();
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (remainingTime.inSeconds > 0) {
+          setState(() {
+            remainingTime = remainingTime - const Duration(seconds: 1);
+          });
+        } else {
+          timer.cancel();
+        }
+      });
+    }
   }
 
   @override
