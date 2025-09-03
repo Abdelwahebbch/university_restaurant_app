@@ -1,7 +1,7 @@
 class Transaction {
   final String id;
   final TransactionType type;
-  final int amount; // En tickets ou millimes selon le type
+  final int amount; // En tickets
   final DateTime date;
   final String description;
   final TransactionStatus status;
