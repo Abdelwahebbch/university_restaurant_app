@@ -55,7 +55,7 @@ class _TransfereScreenState extends State<TransfereScreen> {
               padding: EdgeInsets.all(24),
               child: Text(
                   textAlign: TextAlign.center,
-                  "Pour transferer des tickets merci de saisie le numero de cin du receveur en le nombre des tickets  maxTicket = 10    "),
+                  "Pour transférer des tickets, veuillez saisir le numéro CIN du destinataire et le nombre de tickets  maxTicket = 10 par transaction   "),
             ),
             Padding(
               padding: EdgeInsets.all(25),
@@ -76,6 +76,7 @@ class _TransfereScreenState extends State<TransfereScreen> {
                     height: 12,
                   ),
                   buildInputField(
+                    keyboardType: TextInputType.number,
                     controller: _amounController,
                     label: "Nombre Des Tickets",
                     hint: "Saisie un nombre < 10",
