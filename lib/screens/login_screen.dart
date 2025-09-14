@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:restaurant_universitaire/screens/home_screen.dart';
+import 'package:restaurant_universitaire/screens/reusable_widgets.dart';
 import 'package:restaurant_universitaire/theme/app_theme.dart';
 import 'package:restaurant_universitaire/widgets/failure_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Champ CIN
-                        _buildInputField(
+                        buildInputField(
                           controller: _cinController,
                           label: 'Numéro CIN',
                           hint: 'Entrez votre numéro CIN',
@@ -161,9 +162,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             return null;
                           },
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: AppTheme.textColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         const SizedBox(height: 20),
-                        _buildInputField(
+                        buildInputField(
                           controller: _specialCodeController,
                           label: 'Code spécial',
                           hint: 'Entrez votre code spécial',
@@ -179,6 +185,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             return null;
                           },
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: AppTheme.textColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
 
                         const SizedBox(height: 32),
@@ -229,74 +240,6 @@ class _LoginScreenState extends State<LoginScreen> {
             message: "You Dont have an Account !",
           ),
       ]),
-    );
-  }
-
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    required IconData icon,
-    bool obscureText = false,
-    TextInputType? keyboardType,
-    List<TextInputFormatter>? inputFormatters,
-    TextCapitalization textCapitalization = TextCapitalization.none,
-    Widget? suffixIcon,
-    String? Function(String?)? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: AppTheme.textColor,
-                fontWeight: FontWeight.w600,
-              ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          inputFormatters: inputFormatters,
-          textCapitalization: textCapitalization,
-          validator: validator,
-          decoration: InputDecoration(
-            hintText: hint,
-            prefixIcon:
-                Icon(icon, color: AppTheme.textColor.withValues(alpha: 0.6)),
-            suffixIcon: suffixIcon,
-            filled: false,
-            fillColor: AppTheme.cardColor,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(
-                  color: AppTheme.borderColor.withValues(alpha: 0.5)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(
-                  color: AppTheme.borderColor.withValues(alpha: 0.5)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide:
-                  const BorderSide(color: AppTheme.primaryColor, width: 2),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: Colors.red, width: 1),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: Colors.red, width: 2),
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          ),
-        ),
-      ],
     );
   }
 }
