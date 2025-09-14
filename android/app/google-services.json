@@ -1,1 +1,30 @@
-
+{
+  "project_info": {
+    "project_number": "892054426192",
+    "firebase_url": "https://wahatapplication-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "wahatapplication",
+    "storage_bucket": "wahatapplication.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892054426192:android:8631c23e81c628aa703755",
+        "android_client_info": {
+          "package_name": "com.abdelwaheb.wahat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu4OBrsmUMc8h2AABBxen2xZviJUpylCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
