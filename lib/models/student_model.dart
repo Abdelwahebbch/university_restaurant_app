@@ -53,6 +53,21 @@ class Student {
     );
   }
 
+  factory Student.fromSupabase(Map<int, Map<String, dynamic>> data) {
+    return Student(
+      name: data[1]?['Name'] ?? "Not Available !",
+      specialite: data[1]?['Specialite'] ?? "Not Available",
+      cin: data[1]?['Cin'] ?? "Not Available",
+      solde: data[1]?['Solde'] ?? 0,
+      faculty: data[1]?['Faculty'] ?? "Not Available",
+      university: data[1]?['University'] ?? "Not Available",
+      level: data[1]?['Level'] ?? "Not Available",
+      nbRepas: data[1]?['NbRepas'] ?? "Not Available",
+      totalDepense: data[1]?['TotalDepense'] ?? "Not Available",
+      membreDepuis: data[1]?['MembreDepuis'] ?? "Not Available",
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
       'Name': name,
@@ -66,5 +81,10 @@ class Student {
       'TotalDepense': totalDepense,
       'MembreDepuis': membreDepuis
     };
+  }
+
+  @override
+  String toString() {
+    return 'Student{name: $name, cin: $cin, solde: $solde}';
   }
 }
