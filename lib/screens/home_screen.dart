@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:restaurant_universitaire/screens/profile_screen.dart';
+import 'package:restaurant_universitaire/screens/transferer_screen.dart';
 import 'package:restaurant_universitaire/widgets/failure_message.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_universitaire/widgets/balance_card.dart';
@@ -137,6 +138,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/history');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.swap_horiz, color: Color(0xFF0891B2)),
+                title: const Text('Transférer'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TransfereScreen()));
                 },
               ),
               const Divider(),
